@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lagwagon Day — May 16</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Mono:wght@400;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --fg: #f0f0f0;
+      --accent: #91ff00;
+      --dim: #787878;
+    }
+
+    body {
+      background: var(--bg) url('https://upload.wikimedia.org/wikipedia/en/3/35/Lets-Talk-About-Feelings.jpg') center center / cover no-repeat fixed;
+      color: var(--fg);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* dark overlay so text reads over the album art */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(3rem, 12vw, 8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      text-shadow: 4px 4px 0 #5a6300;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+      color: var(--dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+
+    .subtitle span {
+      color: var(--fg);
+    }
+
+    #done-message {
+      display: none;
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2rem, 8vw, 5rem);
+      color: var(--accent);
+      line-height: 1.1;
+      margin-bottom: 3rem;
+    }
+
+    .countdown {
+      display: flex;
+      gap: clamp(1rem, 4vw, 2.5rem);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .value {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2.5rem, 10vw, 6rem);
+      line-height: 1;
+      color: var(--fg);
+      min-width: 2ch;
+      text-align: center;
+      transition: color 0.15s;
+    }
+
+    /*
+    .value.tick {
+      color: var(--accent);
+    }
+    */
+
+    .label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .divider {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2rem, 8vw, 5rem);
+      color: var(--dim);
+      align-self: center;
+      padding-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .tagline {
+      font-size: 0.8rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+    }
+
+    .tagline a {
+      color: var(--fg);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .bar {
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      margin: 1.5rem auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">    
+<!--  
+    <p class="eyebrow">Counting down to</p>
+  -->
+    <h1>MAY 16</h1>
+    <p class="subtitle"><span>Lagwagon Day</span></p>
+
+    <div id="done-message">TODAY IS<br>LAGWAGON DAY!</div>
+
+    <div class="countdown" id="countdown">
+      <div class="unit">
+        <span class="value" id="days">--</span>
+        <span class="label">days</span>
+      </div>
+      <div class="divider">:</div>
+      <div class="unit">
+        <span class="value" id="hours">--</span>
+        <span class="label">hours</span>
+      </div>
+      <div class="divider">:</div>
+      <div class="unit">
+        <span class="value" id="minutes">--</span>
+        <span class="label">minutes</span>
+      </div>
+      <div class="divider">:</div>
+      <div class="unit">
+        <span class="value" id="seconds">--</span>
+        <span class="label">seconds</span>
+      </div>
+    </div>
+
+    <p class="eyebrow">It's just another Saturday</p>
+
+    <div class="bar"></div>
+    <p class="tagline">
+      <a href="https://www.lagwagon.com" target="_blank" rel="noopener">Lagwagon</a>
+    </p>
+  </div>
+
+  <script>
+    function getNextMay16() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const candidate = new Date(year, 4, 16); // May is month 4
+      // If May 16 already passed this year, aim for next year
+      if (now > candidate && !(now.getMonth() === 4 && now.getDate() === 16)) {
+        candidate.setFullYear(year + 1);
+      }
+      return candidate;
+    }
+
+    function pad(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function tick(el) {
+      el.classList.add('tick');
+      setTimeout(() => el.classList.remove('tick'), 150);
+    }
+
+    const daysEl     = document.getElementById('days');
+    const hoursEl    = document.getElementById('hours');
+    const minutesEl  = document.getElementById('minutes');
+    const secondsEl  = document.getElementById('seconds');
+    const countdown  = document.getElementById('countdown');
+    const doneMsg    = document.getElementById('done-message');
+
+    let prevSeconds = null;
+
+    function update() {
+      const now = new Date();
+      const isLagwagonDay = now.getMonth() === 4 && now.getDate() === 16;
+
+      if (isLagwagonDay) {
+        countdown.style.display = 'none';
+        doneMsg.style.display = 'block';
+        return;
+      }
+
+      const target = getNextMay16();
+      const diff = target - now;
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const s = totalSeconds % 60;
+      const m = Math.floor(totalSeconds / 60) % 60;
+      const h = Math.floor(totalSeconds / 3600) % 24;
+      const d = Math.floor(totalSeconds / 86400);
+
+      if (s !== prevSeconds) {
+        tick(secondsEl);
+        if (s === 59) tick(minutesEl);
+        prevSeconds = s;
+      }
+
+      daysEl.textContent    = d;
+      hoursEl.textContent   = pad(h);
+      minutesEl.textContent = pad(m);
+      secondsEl.textContent = pad(s);
+    }
+
+    update();
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>
